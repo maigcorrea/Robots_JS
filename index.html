@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/vapor/bootstrap.min.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <!-- <div class="container">
+        <div class="row"> -->
+            <!-- INICIO CON-MD-4 -->
+            <!-- <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">
+                        <img src="https://robohash.org/hicveldicta.png" alt="">
+                    </div>
+                    <div class="card-body">
+                      <h4 class="card-title">Primary card title</h4>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">
+                        <img src="https://robohash.org/hicveldicta.png" alt="">
+                    </div>
+                    <div class="card-body">
+                      <h4 class="card-title">Primary card title</h4>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">
+                        <img src="https://robohash.org/hicveldicta.png" alt="">
+                    </div>
+                    <div class="card-body">
+                      <h4 class="card-title">Primary card title</h4>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </div>
+            </div> -->
+            <!-- FIN COL-MD-4 -->
+        <!-- </div>
+    </div> -->
+
+    <!-- <div class="card">
+        <div class="image-container">
+            <img src="" alt="">
+        </div>
+        <div class="body-container">
+            <h4></h4>
+            <p></p>
+            <p></p>
+        </div>
+    </div> -->
+</body>
+    <script src="/js/datos.js"></script>
+    <script>
+        //VARIABLES Y CONSTANTES
+        const container=crearElemento("div");//1.1 Crear contenedor
+        const row=crearElemento("div");//1.1 Crear row
+
+
+        //FUNCIONES
+        function crearElemento(e){
+            return document.createElement(e);
+        }
+
+        function $(elemento){ //Seleccionar un elemento
+            return document.querySelector(elemento);
+        }
+
+        function $$(elemento){ //Seleccionar varios elementos
+            return document.querySelectorAll(elemento);
+        }
+
+
+        //CÓDIGO GENERAL
+
+        //1. Hay que crear a los robots dinamicamente
+        document.addEventListener("DOMContentLoaded",()=>{
+
+        //1.2. Dar atributos a lo que hemos creado anteriormente (las clases)
+        container.setAttribute("class","container text-center my-5");//1.2 Se indica el tipo de atributo y lo que contendrá
+        row.setAttribute("class","row"); //Las clases primero poner las tuyas y luego las de bootswatch
+
+        //1.3. Insertar el row en el container
+        container.append(row);
+
+        //2. AHORA HAY QUE METER CONTENIDO DENTRO DE LOS CONTENEDORES (ANTES DE INSERTARLO TODO EN EL BODY)
+        let [{image,firstName,email,phone}]=users;//2.2 Desestructurar datos, para no tener que repetir luego ${usuario.image}, ${usuario.firstName} etc...
+            
+            users.forEach(user => { //2.1 users lo cogemos de los datos en el js, y de cada usuario tenemos sus datos. DESESTRUCTURAMOS DATOS PARA QUE SEA MÁS FÁCIL
+                let col=crearElemento("div");//2.2 Para cada usuario creamos un div, que contendrá sus datos, y le ponemos atributos
+                col.setAttribute("class","col-md-4");
+
+                //2.3 Hay que meter los datos del usario dentro del div
+                col.innerHTML=`
+                    <div class="card text-white bg-primary mb-3">
+                    <div class="image-container card-header">
+                        <img src="${user.image}" alt="">
+                    </div>
+                    <div class="body-container card-body">
+                        <h4 class="card-title">${user.firstName}</h4>
+                        <div class="text-container">
+                            <h4>${user.email}</h4>
+                            <h4>${user.phone}</h4>
+                        </div>
+                    </div>
+                    </div>
+                `;
+
+                //2.4 Una vez metidos los datos, hay que insertar ese col(donde están los datos) en el row
+                row.append(col);
+            });
+
+        //2.5 Una vez tenemos row y col dentro de container, hay que insertar el container en el body
+        document.body.append(container);
+
+
+
+        //3. AÑADIR BUSCADOR
+        let input=crearElemento("input");//3.1 Se crea el buscador
+        input.setAttribute("type","search");//3.2 Se asignan los atributos correspondientes al buscador
+        input.setAttribute("placeholder","Buscar");
+
+        let buscador=$("input[type='search']");//3.3 Se selecciona el buscador que previamente hemos creado
+        let nombresRobot=$$("h4.card-title");//3.3 Se seleccionan todos los h4 que tengan como clase 'card-title'
+
+
+        // 3.4 Insertar dentro del contenedor el buscador, al principio del contenedor
+        container.prepend(input);
+
+        //3.5 Añadir funcionalidad de buscar
+        input.addEventListener("input",(e)=>{
+            let busqueda=e.target.value.toLowerCase();//3.6 Va almacenando en tiempo real lo que se escriba en el input buscador
+             
+            nombresRobot.forEach(nombre=>{//3.7 Por cada nombre de robot, se comprueba si es el buscado
+                
+                let nodoPadre=nombre.closest(".col-md-4");//3.9 Se averigua el col más cercano de cada nombre,es decir, el nodo más cercano al h4 del nombre, que tenga como clase 'col-ms-4' 
+
+                if(nombre.textContent.toLowerCase().includes(busqueda)){
+                    //3.8 Si el nombre del robot contiene loq ue hay en la búsqueda, se muestra ese robot en concredo, 
+                    //es decir, su contenedor, su col, para ello antes hay que sacar el col más cercano a ese h4(el col más cercano al nombre del robot)
+                    nodoPadre.style.display="block";
+                }else{
+                    nodoPadre.style.display="none";
+                }
+            })
+
+        })
+        })
+
+
+    </script>
+</body>
+</html>
